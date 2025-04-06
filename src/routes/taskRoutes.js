@@ -1,28 +1,32 @@
 const express = require("express");
 const Task = require("../models/Task");
 const authMiddleware = require("../middleware/authMiddleware");
+const User = require("../models/User");
+
 const router = express.Router();
 
-// Create Task
-router.post("/create", authMiddleware, async (req, res) => {
-    try {
-        const { title, description, status, assignedTo } = req.body;
-        const newTask = new Task({ title, description, status, assignedTo });
-        await newTask.save();
-        res.status(201).json(newTask);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+// Assign Task (HOD)
+router.post("/assign", authMiddleware, async (req, res) => {
+  if (req.user.role !== "HOD") return res.status(403).json({ message: "Access Denied!" });
+
+  try {
+    const { title, description, assignedTo } = req.body;
+    const task = new Task({ title, description, assignedTo });
+    await task.save();
+    res.redirect("/dashboard");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Fetch All Tasks
+// Get Tasks (Faculty)
 router.get("/", authMiddleware, async (req, res) => {
-    try {
-        const tasks = await Task.find();
-        res.json(tasks);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+  try {
+    const tasks = await Task.find({ assignedTo: req.user._id });
+    res.render("dashboard", { tasks, isHOD: req.user.role === "HOD" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;
