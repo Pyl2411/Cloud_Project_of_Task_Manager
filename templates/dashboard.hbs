@@ -1,149 +1,78 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Task Manager</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css">
-    
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-    <style>
-        /* Sidebar Styling */
-        #sidebar {
-            width: 250px;
-            height: 100vh;
-            position: fixed;
-            background: #343a40;
-            color: white;
-            padding: 20px;
-        }
-        #sidebar a {
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            display: block;
-            border-radius: 5px;
-            margin: 5px 0;
-        }
-        #sidebar a:hover {
-            background: #495057;
-        }
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-        }
-        .card-header {
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
+  <div class="header flex-between">
+    <h1>Welcome, {{user.username}} ({{user.role}})</h1>
+    <a href="/logout" class="btn-primary">Logout</a>
+  </div>
 
-<!-- Sidebar Navigation -->
-<div class="d-flex">
-    <div id="sidebar">
-        <h3 class="text-center">Task Manager</h3>
-        <hr>
-        <p class="text-center">Welcome, <strong>{{user.username}}</strong></p>
-        <p class="text-center"><small>Role: {{user.role}}</small></p>
-        <hr>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="/dashboard">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-            </li>
-            {{#if (eq user.role "HOD")}}
-            <li class="nav-item">
-                <a class="nav-link" href="#assignTask">
-                    <i class="fas fa-tasks"></i> Assign Task
-                </a>
-            </li>
-            {{/if}}
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </li>
-        </ul>
-    </div>
-
-    <!-- Main Content -->
-    <div class="content">
-        {{#if message}} 
-            <div class="alert alert-success">{{message}}</div> 
-        {{/if}}
-        {{#if error}} 
-            <div class="alert alert-danger">{{error}}</div> 
-        {{/if}}
-
+  <div class="container">
+    {{#ifCond user.role "==" "HOD"}}
+    <div class="card">
+      <h2>Assign New Task</h2>
+      <form class="task-form" action="/tasks" method="POST">
+        <input type="text" name="title" placeholder="Task Title" required>
+        <textarea name="description" placeholder="Task Description" required></textarea>
+        <select name="assignedTo" required>
+          <option value="">-- Select Faculty --</option>
+          {{#each facultyList}}
+            <option value="{{this._id}}">{{this.username}}</option>
+          {{/each}}
+        </select>
         <div class="row">
-            <!-- Assign Task (HOD Only) -->
-            {{#if (eq user.role "HOD")}}
-            <div class="col-md-6" id="assignTask">
-                <div class="card shadow-lg">
-                    <div class="card-header bg-secondary text-white">Assign New Task</div>
-                    <div class="card-body">
-                        <form action="/tasks" method="POST">
-                            <div class="mb-3">
-                                <input type="text" name="title" class="form-control" placeholder="Task Title" required>
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" name="description" class="form-control" placeholder="Task Description" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Assign to Faculty:</label>
-                                <select name="assignedTo" class="form-control" required>
-                                    <option value="" disabled selected>Select Faculty</option>
-                                    {{#each facultyList}}
-                                        <option value="{{this._id}}">{{this.username}}</option>
-                                    {{/each}}
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-secondary w-100">Assign Task</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {{/if}}
-
-            <!-- Task List -->
-            <div class="col-md-6">
-                <div class="card shadow-lg">
-                    <div class="card-header bg-info text-white">Assigned Tasks</div>
-                    <div class="card-body">
-                        {{#if tasks.length}}
-                        <ul class="list-group">
-                            {{#each tasks}}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>{{title}}</strong> - {{description}}
-                                    <br>
-                                    <small class="text-muted">Assigned To: {{assignedTo.username}}</small>
-                                </div>
-                                {{#if (eq ../user.role "HOD")}}
-                                <form action="/tasks/delete/{{_id}}" method="POST">
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </form>
-                                {{/if}}
-                            </li>
-                            {{/each}}
-                        </ul>
-                        {{else}}
-                        <p class="text-muted">No tasks assigned yet.</p>
-                        {{/if}}
-                    </div>
-                </div>
-            </div>
+          <div class="col">
+            <label>Start Date</label>
+            <input type="datetime-local" name="startDate" required>
+          </div>
+          <div class="col">
+            <label>Deadline</label>
+            <input type="datetime-local" name="deadline" required>
+          </div>
         </div>
+        <button type="submit" class="btn-primary">Assign Task</button>
+      </form>
     </div>
-</div>
+    {{/ifCond}}
 
+    <div class="card">
+      <h2>Assigned Tasks</h2>
+      <div class="table-container">
+        <table class="tasks-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              {{#ifCond user.role "==" "HOD"}}<th>Assigned To</th>{{/ifCond}}
+              <th>Assigned By</th>
+              <th>Status</th>
+              <th>Created At</th>
+              <th>Start Date</th>
+              <th>Deadline</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each tasks}}
+            <tr>
+              <td>{{this.title}}</td>
+              <td>{{this.description}}</td>
+              {{#ifCond ../user.role "==" "HOD"}}<td>{{this.assignedTo.username}}</td>{{/ifCond}}
+              <td>{{this.assignedBy.username}}</td>
+              <td>{{this.status}}</td>
+              <td>{{formatDate this.createdAt}}</td>
+              <td>{{formatDate this.startDate}}</td>
+              <td>{{formatDate this.deadline}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
