@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,17 +5,24 @@
   <title>Dashboard</title>
   <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-  <div class="header flex-between">
-    <h1>Welcome, {{user.username}} ({{user.role}})</h1>
-    <a href="/logout" class="btn-primary">Logout</a>
-  </div>
+<body class="dashboard-body">
+  <header class="dashboard-header">
+    <h1>Task Manager</h1>
+    <div class="user-info">
+      Welcome, <strong>{{user.username}}</strong> ({{user.role}})
+      <a href="/logout" class="logout-btn">Logout</a>
+      <button id="mode-toggle">🌙</button>
+    </div>
+  </header>
 
-  <div class="container">
-    {{#ifCond user.role "==" "HOD"}}
-    <div class="card">
-      <h2>Assign New Task</h2>
-      <form class="task-form" action="/tasks" method="POST">
+
+  
+
+  {{!-- HOD Assign Task to Faculty --}}
+  {{#ifCond user.role "==" "HOD"}}
+    <section class="assign-task">
+      <h2>Assign Task to Faculty</h2>
+      <form action="/tasks" method="POST" class="task-form">
         <input type="text" name="title" placeholder="Task Title" required>
         <textarea name="description" placeholder="Task Description" required></textarea>
         <select name="assignedTo" required>
@@ -25,54 +31,148 @@
             <option value="{{this._id}}">{{this.username}}</option>
           {{/each}}
         </select>
-        <div class="row">
-          <div class="col">
-            <label>Start Date</label>
-            <input type="datetime-local" name="startDate" required>
-          </div>
-          <div class="col">
-            <label>Deadline</label>
-            <input type="datetime-local" name="deadline" required>
-          </div>
-        </div>
-        <button type="submit" class="btn-primary">Assign Task</button>
+        <label>Start Date: <input type="datetime-local" name="startDate" required></label>
+        <label>Deadline: <input type="datetime-local" name="deadline" required></label>
+        <button type="submit">Assign Task</button>
       </form>
-    </div>
-    {{/ifCond}}
+    </section>
+  {{/ifCond}}
 
-    <div class="card">
-      <h2>Assigned Tasks</h2>
-      <div class="table-container">
-        <table class="tasks-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              {{#ifCond user.role "==" "HOD"}}<th>Assigned To</th>{{/ifCond}}
-              <th>Assigned By</th>
-              <th>Status</th>
-              <th>Created At</th>
-              <th>Start Date</th>
-              <th>Deadline</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each tasks}}
+  {{!-- Faculty Assign Task to Student --}}
+  {{#ifCond user.role "==" "Faculty"}}
+    <section class="assign-task">
+      <h2>Assign Task to Student</h2>
+      <form action="/tasks" method="POST" class="task-form">
+        <input type="text" name="title" placeholder="Task Title" required>
+        <textarea name="description" placeholder="Task Description" required></textarea>
+        <select name="assignedTo" required>
+          <option value="">-- Select Student --</option>
+          {{#each studentList}}
+            <option value="{{this._id}}">{{this.username}}</option>
+          {{/each}}
+        </select>
+        <label>Start Date: <input type="datetime-local" name="startDate" required></label>
+        <label>Deadline: <input type="datetime-local" name="deadline" required></label>
+        <button type="submit">Assign Task</button>
+      </form>
+    </section>
+  {{/ifCond}}
+
+  {{!-- Student Upload Fine Receipt --}}
+  {{#ifCond user.role "==" "Student"}}
+    <section class="upload-section">
+      <h2>Upload Fine Receipt</h2>
+      <form action="/upload-receipt" method="POST" enctype="multipart/form-data" class="upload-form">
+        <input type="file" name="receipt" required>
+        <button type="submit">Upload Receipt</button>
+      </form>
+    </section>
+  {{/ifCond}}
+
+  {{!-- Progress bar for Faculty --}}
+  {{#ifCond user.role "==" "Faculty"}}
+    <section class="progress-bar">
+      <h3>Task Progress</h3>
+      <progress value="{{completedTasks}}" max="{{totalTasks}}"></progress>
+      <p>{{completedTasks}} / {{totalTasks}} Tasks Completed</p>
+    </section>
+  {{/ifCond}}
+
+  {{!-- Task List --}}
+  <section class="task-section">
+    <h2>Assigned Tasks</h2>
+    {{#if tasks.length}}
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Assigned To</th>
+            <th>Assigned By</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Start Date</th>
+            <th>Deadline</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each tasks}}
             <tr>
               <td>{{this.title}}</td>
               <td>{{this.description}}</td>
-              {{#ifCond ../user.role "==" "HOD"}}<td>{{this.assignedTo.username}}</td>{{/ifCond}}
+              <td>{{this.assignedTo.username}}</td>
               <td>{{this.assignedBy.username}}</td>
               <td>{{this.status}}</td>
               <td>{{formatDate this.createdAt}}</td>
               <td>{{formatDate this.startDate}}</td>
               <td>{{formatDate this.deadline}}</td>
+              <td>
+                {{#ifCond ../user.role "==" "HOD"}}
+                  <form action="/tasks/delete/{{this._id}}" method="POST" onsubmit="return confirm('Delete this task?')">
+                    <button type="submit" class="delete-btn">Delete</button>
+                  </form>
+                {{/ifCond}}
+
+                {{#ifCond ../user.role "==" "Faculty"}}
+                  {{#ifCond this.status "!=" "Done"}}
+                    <form action="/tasks/done/{{this._id}}" method="POST">
+                      <button type="submit" class="done-btn">Mark as Done</button>
+                    </form>
+                  {{/ifCond}}
+                {{/ifCond}}
+
+                {{#ifCond ../user.role "==" "Student"}}
+                  {{#ifCond this.status "!=" "Submitted"}}
+                    <form action="/tasks/submit/{{this._id}}" method="POST">
+                      <button type="submit" class="submit-btn">Submit</button>
+                    </form>
+                  {{/ifCond}}
+                {{/ifCond}}
+              </td>
             </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <p>No tasks found.</p>
+    {{/if}}
+  </section>
+
+  {{!-- Uploaded Receipts (Visible to Faculty and HOD) --}}
+  {{#ifCond user.role "!=" "Student"}}
+    <section class="receipt-section">
+      <h2>Uploaded Fine Receipts</h2>
+      {{#if receipts.length}}
+        <table class="task-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>File</th>
+              <th>Uploaded At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each receipts}}
+              <tr>
+                <td>{{this.student.username}}</td>
+                <td><a href="/uploads/{{this.filename}}" target="_blank">{{this.filename}}</a></td>
+                <td>{{formatDate this.uploadedAt}}</td>
+              </tr>
             {{/each}}
           </tbody>
         </table>
-      </div>
-    </div>
-  </div>
+      {{else}}
+        <p>No receipts uploaded yet.</p>
+      {{/if}}
+    </section>
+  {{/ifCond}}
+
+  <script>
+    // Light/Dark mode toggle
+    document.getElementById("mode-toggle").addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+    });
+  </script>
 </body>
 </html>

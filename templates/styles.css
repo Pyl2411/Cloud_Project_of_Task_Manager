@@ -1,64 +1,226 @@
-/* General Styles */
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #1f1c2c, #928dab);
-}
-
-/* Login Container */
-.login-container {
+/* Reset and base styles */
+body, h1, h2, h3, p, table, input, textarea, select, button {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    box-sizing: border-box;
+  }
+  
+  body.dashboard-body {
+    background-color: #f4f6f8;
+    color: #333;
+    padding: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .dashboard-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    width: 100%;
-    height: 100vh;
-}
-
-/* Login Box */
-.login-box {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 40px;
-    border-radius: 15px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-    width: 100%;
-    max-width: 400px;
-    transition: 0.3s ease-in-out;
-}
-
-/* Input Fields */
-.input-group-text {
-    background: rgba(255, 255, 255, 0.2);
+    background-color: #0066cc;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 28px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .logout-btn {
+    background-color: #ff4d4d;
     color: white;
     border: none;
-}
-
-input.form-control {
-    background: transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .logout-btn:hover {
+    background-color: #e60000;
+  }
+  
+  #mode-toggle {
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
     color: white;
+  }
+  
+  .assign-task, .progress-bar, .task-section {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  }
+  
+  h2, h3 {
+    margin-bottom: 15px;
+    color: #004080;
+  }
+  
+  .task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .task-form input[type="text"],
+  .task-form textarea,
+  .task-form select,
+  .task-form input[type="datetime-local"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  
+  .task-form button {
+    background-color: #0066cc;
+    color: white;
+    padding: 10px;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-/* Placeholder Text */
-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-/* Button Hover Effect */
-.btn-primary {
-    background-color: #007bff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .task-form button:hover {
+    background-color: #005bb5;
+  }
+  
+  .task-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .task-table th,
+  .task-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .task-table th {
+    background-color: #f0f0f0;
+    color: #004080;
+  }
+  
+  .task-table tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+  
+  .task-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .delete-btn,
+  .done-btn {
+    padding: 6px 10px;
+    font-size: 13px;
     border: none;
-    transition: 0.3s;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .login-box {
-        padding: 30px;
-    }
-}
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .delete-btn {
+    background-color: #e63946;
+    color: white;
+  }
+  
+  .done-btn {
+    background-color: #2a9d8f;
+    color: white;
+  }
+  
+  .delete-btn:hover {
+    background-color: #c62828;
+  }
+  
+  .done-btn:hover {
+    background-color: #21867a;
+  }
+  
+  /* Progress bar */
+  progress {
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  progress::-webkit-progress-bar {
+    background-color: #eee;
+    border-radius: 10px;
+  }
+  
+  progress::-webkit-progress-value {
+    background-color: #2a9d8f;
+    border-radius: 10px;
+  }
+  
+  /* Dark mode styles */
+  body.dark-mode {
+    background-color: #1e1e2f;
+    color: #f0f0f0;
+  }
+  
+  body.dark-mode .dashboard-header {
+    background-color: #333;
+  }
+  
+  body.dark-mode .logout-btn {
+    background-color: #cc0000;
+  }
+  
+  body.dark-mode .assign-task,
+  body.dark-mode .progress-bar,
+  body.dark-mode .task-section {
+    background-color: #2a2a3b;
+    box-shadow: none;
+  }
+  
+  body.dark-mode .task-table th {
+    background-color: #3a3a4d;
+    color: #ddd;
+  }
+  
+  body.dark-mode .task-table td {
+    background-color: #2f2f40;
+  }
+  
+  body.dark-mode .task-table tr:hover {
+    background-color: #3d3d52;
+  }
+  
+  body.dark-mode .task-form input,
+  body.dark-mode .task-form textarea,
+  body.dark-mode .task-form select {
+    background-color: #444;
+    color: white;
+    border: 1px solid #666;
+  }
+  
+  body.dark-mode .task-form button {
+    background-color: #4a90e2;
+  }
+  
+  body.dark-mode .done-btn {
+    background-color: #43b581;
+  }
+  
+  body.dark-mode .delete-btn {
+    background-color: #ff5c5c;
+  }
+  
