@@ -1,15 +1,6 @@
 const mongoose = require("mongoose");
-
-const receiptSchema = new mongoose.Schema({
+module.exports = mongoose.model("Receipt", new mongoose.Schema({
+  student: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   filename: String,
-  student: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  },
-  uploadedAt: {
-    type: Date,
-    default: Date.now
-  }
-});
-
-module.exports = mongoose.model("Receipt", receiptSchema);
+  uploadedAt: Date,
+}));

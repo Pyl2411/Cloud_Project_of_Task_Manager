@@ -6,10 +6,10 @@ const nodemailer = require("nodemailer");
 
 const router = express.Router();
 
-// Assign Task (HOD or Faculty)
+// Assign Task (HOD only)
 router.post("/assign", authMiddleware, async (req, res) => {
-  if (req.user.role !== "HOD" && req.user.role !== "Faculty") {
-    return res.status(403).json({ message: "Access Denied!" });
+  if (req.user.role !== "HOD") {
+    return res.status(403).json({ message: "Only HODs can assign tasks!" });
   }
 
   try {
@@ -26,7 +26,6 @@ router.post("/assign", authMiddleware, async (req, res) => {
 
     await task.save();
 
-    // Send email notification to assignee
     const assignee = await User.findById(assignedTo);
     if (assignee && assignee.email) {
       const transporter = nodemailer.createTransport({
@@ -72,7 +71,7 @@ router.get("/", authMiddleware, async (req, res) => {
       tasks = await Task.find({
         $or: [
           { assignedTo: req.user._id },
-          { assignedBy: req.user._id, "assignedTo.role": "Student" },
+          { assignedBy: req.user._id },
         ],
       })
         .populate("assignedTo", "username role")

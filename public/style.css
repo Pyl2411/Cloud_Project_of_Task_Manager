@@ -1,226 +1,237 @@
-/* Reset and base styles */
-body, h1, h2, h3, p, table, input, textarea, select, button {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', sans-serif;
-    box-sizing: border-box;
-  }
-  
-  body.dashboard-body {
-    background-color: #f4f6f8;
-    color: #333;
-    padding: 20px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body.dashboard-body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  padding: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+}
+
+.dark-mode .dashboard-header,
+.dark-mode .task-table,
+.dark-mode .assign-task,
+.dark-mode .upload-section,
+.dark-mode .receipt-section,
+.dark-mode .progress-bar {
+  background-color: #2e2e2e;
+  color: #e0e0e0;
+}
+
+/* Header */
+.dashboard-header {
+  background-color: #1a73e8;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-header h1 {
+  font-size: 24px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logout-btn {
+  padding: 6px 12px;
+  background-color: #e53935;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+#mode-toggle {
+  font-size: 18px;
+  padding: 5px 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Sections */
+.assign-task,
+.upload-section,
+.receipt-section,
+.task-section,
+.progress-bar {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Forms */
+.task-form,
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.task-form input,
+.task-form textarea,
+.task-form select,
+.upload-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.task-form button,
+.upload-form button {
+  padding: 10px;
+  border: none;
+  background-color: #1a73e8;
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.task-form button:hover,
+.upload-form button:hover {
+  background-color: #155bb5;
+}
+
+/* Tables */
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.task-table th,
+.task-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.task-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+/* Buttons */
+.delete-btn,
+.done-btn,
+.submit-btn {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin: 2px;
+}
+
+.delete-btn {
+  background-color: #e53935;
+}
+
+.done-btn {
+  background-color: #43a047;
+}
+
+.submit-btn {
+  background-color: #fb8c00;
+}
+
+.delete-btn:hover {
+  background-color: #c62828;
+}
+
+.done-btn:hover {
+  background-color: #388e3c;
+}
+
+.submit-btn:hover {
+  background-color: #ef6c00;
+}
+
+/* Progress Bar */
+progress {
+  width: 100%;
+  height: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 10px;
+}
+
+progress::-webkit-progress-value {
+  background-color: #1a73e8;
+  border-radius: 10px;
+}
+
+progress::-moz-progress-bar {
+  background-color: #1a73e8;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
   .dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #0066cc;
-    color: white;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
-  
-  .dashboard-header h1 {
-    font-size: 28px;
-  }
-  
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .logout-btn {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.2s;
-  }
-  
-  .logout-btn:hover {
-    background-color: #e60000;
-  }
-  
-  #mode-toggle {
-    font-size: 18px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: white;
-  }
-  
-  .assign-task, .progress-bar, .task-section {
-    background: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-  }
-  
-  h2, h3 {
-    margin-bottom: 15px;
-    color: #004080;
-  }
-  
-  .task-form {
-    display: flex;
     flex-direction: column;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 10px;
   }
-  
-  .task-form input[type="text"],
-  .task-form textarea,
-  .task-form select,
-  .task-form input[type="datetime-local"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
+
+  .task-table, .task-table thead, .task-table tbody, .task-table th, .task-table td, .task-table tr {
+    display: block;
   }
-  
-  .task-form button {
-    background-color: #0066cc;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+
+  .task-table tr {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .task-table td {
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .task-table td::before {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    white-space: nowrap;
     font-weight: bold;
   }
-  
-  .task-form button:hover {
-    background-color: #005bb5;
-  }
-  
-  .task-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  .task-table th,
-  .task-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-  }
-  
-  .task-table th {
-    background-color: #f0f0f0;
-    color: #004080;
-  }
-  
-  .task-table tr:nth-child(even) {
-    background-color: #fafafa;
-  }
-  
-  .task-table tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .delete-btn,
-  .done-btn {
-    padding: 6px 10px;
-    font-size: 13px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .delete-btn {
-    background-color: #e63946;
-    color: white;
-  }
-  
-  .done-btn {
-    background-color: #2a9d8f;
-    color: white;
-  }
-  
-  .delete-btn:hover {
-    background-color: #c62828;
-  }
-  
-  .done-btn:hover {
-    background-color: #21867a;
-  }
-  
-  /* Progress bar */
-  progress {
-    width: 100%;
-    height: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  progress::-webkit-progress-bar {
-    background-color: #eee;
-    border-radius: 10px;
-  }
-  
-  progress::-webkit-progress-value {
-    background-color: #2a9d8f;
-    border-radius: 10px;
-  }
-  
-  /* Dark mode styles */
-  body.dark-mode {
-    background-color: #1e1e2f;
-    color: #f0f0f0;
-  }
-  
-  body.dark-mode .dashboard-header {
-    background-color: #333;
-  }
-  
-  body.dark-mode .logout-btn {
-    background-color: #cc0000;
-  }
-  
-  body.dark-mode .assign-task,
-  body.dark-mode .progress-bar,
-  body.dark-mode .task-section {
-    background-color: #2a2a3b;
-    box-shadow: none;
-  }
-  
-  body.dark-mode .task-table th {
-    background-color: #3a3a4d;
-    color: #ddd;
-  }
-  
-  body.dark-mode .task-table td {
-    background-color: #2f2f40;
-  }
-  
-  body.dark-mode .task-table tr:hover {
-    background-color: #3d3d52;
-  }
-  
-  body.dark-mode .task-form input,
-  body.dark-mode .task-form textarea,
-  body.dark-mode .task-form select {
-    background-color: #444;
-    color: white;
-    border: 1px solid #666;
-  }
-  
-  body.dark-mode .task-form button {
-    background-color: #4a90e2;
-  }
-  
-  body.dark-mode .done-btn {
-    background-color: #43b581;
-  }
-  
-  body.dark-mode .delete-btn {
-    background-color: #ff5c5c;
-  }
-  
+
+  .task-table td:nth-of-type(1)::before { content: "Title"; }
+  .task-table td:nth-of-type(2)::before { content: "Description"; }
+  .task-table td:nth-of-type(3)::before { content: "Assigned To"; }
+  .task-table td:nth-of-type(4)::before { content: "Assigned By"; }
+  .task-table td:nth-of-type(5)::before { content: "Status"; }
+  .task-table td:nth-of-type(6)::before { content: "Created At"; }
+  .task-table td:nth-of-type(7)::before { content: "Start Date"; }
+  .task-table td:nth-of-type(8)::before { content: "Deadline"; }
+  .task-table td:nth-of-type(9)::before { content: "Action"; }
+}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Details</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="task-detail">
+  <header>
+    <h1>Task Details - {{task.title}}</h1>
+    <a href="/dashboard">Back to Dashboard</a>
+  </header>
+  <style>
+  /* Reset and base styles */
+  body, h1, h2, h3, p, table, input, textarea, select, button {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #f4f6f8;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 0;
+    margin: 0;
+  }
+
+  body.dark {
+    background-color: #121212;
+    color: #f1f1f1;
+  }
+
+  header {
+    background-color: #0066cc;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px;
+  }
+
+  header h1 {
+    font-size: 24px;
+  }
+
+  header a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+
+  header a:hover {
+    text-decoration: underline;
+  }
+
+  #toggleTheme {
+    font-size: 14px;
+    padding: 8px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  #toggleTheme:hover {
+    background-color: #218838;
+  }
+
+  .error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    margin: 20px;
+    border-radius: 8px;
+  }
+
+  .assign-task {
+    background: white;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  }
+
+  .assign-task h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #004080;
+  }
+
+  .assign-task form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .assign-task input,
+  .assign-task textarea,
+  .assign-task select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .assign-task button {
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .assign-task button:hover {
+    background-color: #005bb5;
+  }
+
+  .tasks {
+    margin: 20px;
+  }
+
+  .tasks h2 {
+    font-size: 24px;
+    color: #004080;
+    margin-bottom: 15px;
+  }
+
+  .task-card {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  }
+
+  .task-card h3 {
+    font-size: 20px;
+    color: #0066cc;
+  }
+
+  .task-card p {
+    font-size: 16px;
+    margin: 5px 0;
+  }
+
+  .task-card a,
+  .task-card button {
+    padding: 8px 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .task-card a {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .task-card a:hover {
+    background-color: #0056b3;
+  }
+
+  .task-card button {
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+  }
+
+  .task-card button:hover {
+    background-color: #218838;
+  }
+
+  .task-card form {
+    display: inline;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    header {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .assign-task, .tasks {
+      margin: 10px;
+      padding: 15px;
+    }
+
+    .task-card {
+      padding: 15px;
+    }
+
+    .assign-task input,
+    .assign-task textarea,
+    .assign-task select,
+    .assign-task button,
+    .task-card a,
+    .task-card button {
+      font-size: 14px;
+      padding: 8px 10px;
+    }
+  }
+</style>
+
+  <div class="task-info">
+    <p><strong>Description:</strong> {{task.description}}</p>
+    <p><strong>Assigned By:</strong> {{task.assignedBy.username}}</p>
+    <p><strong>Assigned To:</strong> {{task.assignedTo.username}}</p>
+    <p><strong>Status:</strong> {{task.status}}</p>
+    <p><strong>Start Date:</strong> {{formatDate task.startDate}}</p>
+    <p><strong>Deadline:</strong> {{formatDate task.deadline}}</p>
+  </div>
+
+  {{#ifCond user.role "===" "Student"}}
+    <section class="receipt-upload">
+      <h2>Submit Receipt</h2>
+      <form action="/tasks/{{task._id}}/submit" method="POST" enctype="multipart/form-data">
+        <input type="file" name="receipt" required>
+        <button type="submit">Upload</button>
+      </form>
+    </section>
+  {{/ifCond}}
+
+  <section class="receipts">
+    <h2>Submitted Receipts</h2>
+    {{#if receipt.length}}
+      {{#each receipt}}
+        <div class="receipt-entry">
+          <p><strong>User:</strong> {{this.user.username}}</p>
+          <a href="{{this.path}}" target="_blank">View File</a>
+        </div>
+      {{/each}}
+    {{else}}
+      <p>No receipts submitted yet.</p>
+    {{/if}}
+  </section>
+</body>
+</html>
