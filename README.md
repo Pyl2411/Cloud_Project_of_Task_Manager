@@ -1,10 +1,10 @@
 # 🎯 Role-Based Task Manager Portal
 
-A full-stack web application for managing academic tasks with role-based dashboards and permissions. Built using **React.js** (frontend), **Spring Boot** (backend), and **MySQL** (database).
+A web-based task management system for academic use, built using **Node.js**, **Express.js**, **Bootstrap**, and **Handlebars**. The application supports role-based login and dynamic dashboards for HODs, Faculty, and Students.
 
 ---
 
-## 🚀 Features
+## 🚀 Features by Role
 
 ### 👨‍🏫 HOD (Head of Department)
 - Register & login as HOD
@@ -12,45 +12,41 @@ A full-stack web application for managing academic tasks with role-based dashboa
 - Assign tasks to faculty with:
   - Task title & description
   - Start date & deadline
-- Track task progress submitted by faculty
+- Track task completion status
 
 ### 👩‍🏫 Faculty
 - Register & login as Faculty
 - View tasks assigned by HOD
-- Update task status (Pending / In-progress / Completed)
+- Update task status
 - Assign tasks to students
-- Monitor student submissions
+- View student submissions
 
 ### 👨‍🎓 Student
 - Register & login as Student
 - View tasks assigned by faculty
-- Upload documents such as:
-  - Fee receipts
-  - Assignment/project files
-- View task status and faculty feedback
+- Upload documents (fee receipt, assignment files, etc.)
+- Check task status and feedback
 
 ---
 
-## 🔐 Role-Based Authentication
+## 🔐 Authentication & Authorization
 
-- Users can register and login based on their role (Student, Faculty, or HOD)
-- Protected dashboards using JWT-based authentication
-- Role-based routing and access control
-
----
-
-## 🛠 Tech Stack
-
-| Layer        | Technology     |
-|--------------|----------------|
-| 🖥 Frontend   | React.js, Tailwind CSS |
-| 🧠 Backend    | Spring Boot (Java), Spring Security |
-| 💽 Database   | MySQL |
-| 🔒 Auth       | JWT (JSON Web Token) |
+- Role-based user registration (Student, Faculty, HOD)
+- Secure login system using Express sessions or JWT
+- Dashboard views rendered based on user role
 
 ---
 
-## 📁 Folder Structure Overview
+## 🛠️ Tech Stack
 
-### 📦 Backend (Spring Boot)
+| Layer        | Technology             |
+|--------------|------------------------|
+| 🖥 Frontend   | HTML, Bootstrap 5, Handlebars |
+| 🧠 Backend    | Node.js, Express.js    |
+| 💾 Database   | MongoDB or MySQL (your choice) |
+| 🔐 Auth       | Express Sessions / Passport.js |
+
+---
+
+## 📁 Folder Structure
 
