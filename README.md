@@ -1,4 +1,4 @@
-# 🎯 Role-Based Task Manager Portal
+# 🎯 Smart Task Manager Portal
 
 A web-based task management system for academic use, built using **Node.js**, **Express.js**, **Bootstrap**, and **Handlebars**. The application supports role-based login and dynamic dashboards for HODs, Faculty, and Students.
 
