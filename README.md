@@ -46,7 +46,5 @@ A web-based task management system for academic use, built using **Node.js**, **
 | 💾 Database   | MongoDB or MySQL (your choice) |
 | 🔐 Auth       | Express Sessions / Passport.js |
 
----
 
-## 📁 Folder Structure
 
